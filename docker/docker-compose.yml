@@ -21,7 +21,7 @@ services:
       - CYCLONEDDS_URI=${AMENT_WORKSPACE_DIR}/dds/cyclone.xml
     extra_hosts:
       - "${ROBOT_HOSTNAME}:${ROBOT_IP}"
-    image: outside:devel
+    image: ${ROBOT_HOSTNAME}:devel
     # Required for communicating over the network
     network_mode: "host"
     # Required for accessing hardware
@@ -33,4 +33,5 @@ services:
       # Required for accessing storage media
       #- /media:/media
       - ../dds:${AMENT_WORKSPACE_DIR}/dds/
-      - ../outside-bringup/src:${AMENT_WORKSPACE_DIR}/src
+
+      - ../outside-bringup/src:${AMENT_WORKSPACE_DIR}/src # outside meta-package

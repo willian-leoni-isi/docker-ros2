@@ -97,10 +97,20 @@ RUN apt-get update \
  && chown -R ${UID}:${GID} /home/${USERNAME} \
  && chown -R ${UID}:${GID} ${AMENT_WORKSPACE_DIR}
 
+RUN git clone https://github.com/Livox-SDK/Livox-SDK2.git \
+  &&  cd ./Livox-SDK2/ \
+  &&  mkdir build \
+  &&  cd build \
+  &&  cmake .. && make -j \
+  && sudo make install
+
+# ----- uncomment to use ZSH as default -----
+
 RUN su - ${USERNAME} -c 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended' \
  && chsh -s /bin/zsh ${USERNAME}
-
 RUN chown $USERNAME:$USERNAME /home/$USERNAME/.zshrc
+
+#  --------------------------------------------
 
 ENV DEBIAN_FRONTEND=dialog
 

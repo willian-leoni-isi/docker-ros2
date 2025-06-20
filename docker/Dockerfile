@@ -106,11 +106,14 @@ RUN git clone https://github.com/Livox-SDK/Livox-SDK2.git \
 
 # ----- uncomment to use ZSH as default -----
 
-RUN su - ${USERNAME} -c 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended' \
- && chsh -s /bin/zsh ${USERNAME}
-RUN chown $USERNAME:$USERNAME /home/$USERNAME/.zshrc
+# RUN su - ${USERNAME} -c 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended' \
+#  && chsh -s /bin/zsh ${USERNAME}
+# RUN chown $USERNAME:$USERNAME /home/$USERNAME/.zshrc
+# RUN echo >> ~/.zshrc "source /opt/ros/humble/setup.zsh"
 
 #  --------------------------------------------
+
+RUN echo >> ~/.bashrc "source /opt/ros/humble/setup.bash"
 
 ENV DEBIAN_FRONTEND=dialog
 

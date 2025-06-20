@@ -33,4 +33,4 @@ services:
       # Required for accessing storage media
       #- /media:/media
       - ../dds:${AMENT_WORKSPACE_DIR}/dds/
-      - ~/ros-workspace/outside-bringup:${AMENT_WORKSPACE_DIR}
+      - ../outside-bringup/src:${AMENT_WORKSPACE_DIR}/src

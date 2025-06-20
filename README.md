@@ -34,6 +34,10 @@ In case you are running an Nvidia graphics cards and want to have hardware accel
 
 ## 1.1 Set-up
 
+```
+$ git clone -b outside-integration https://github.com/willian-leoni-isi/docker-ros2.git   
+```
+
 After cloning this repository you will have to update the packages inside the workspace. For version control we use [`vcstool`](http://wiki.ros.org/vcstool) and [`Just`](https://github.com/casey/just?tab=readme-ov-file) to automate the process. In order to **push the repositories** please import them with the following command:
 
 ```

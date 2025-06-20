@@ -46,6 +46,12 @@ $ just clone
 
 This should clone the desired repositories given inside `.repos` into your workspace.
 
+To pull the repositories you can use:
+
+```
+$ just pull   
+```
+
 **Network set-up**: The `ROS_DOMAIN_ID` is used for the ROS 2 DDS middleware configuration. The parameter `YOUR_IP` corresponds to the IP that you are using, in case you are running a simulation set it to `127.0.0.1` while for working with a physical robot you will have to set it to the IP assigned to the network interface used for connecting to the robot shown by `$ ifconfig` from the `net-tools` package on your computer. We use it for the DDS middleware configuration. The `ROBOT_IP` as well as the `ROBOT_HOSTNAME` are used to configure the `/etc/hosts` file as well as configuring the DDS middleware by IP. They should correspond to the IP shown by `$ ifconfig` on the robot as well as to its `$ hostname` and can be set to `127.0.0.1` and an arbitrary hostname in case of the simulation, you can look at this configuration in the `.env` file inside `humble` folder.
 
 

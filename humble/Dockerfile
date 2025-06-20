@@ -45,7 +45,7 @@ ARG GID=1000
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# MODIFICADO: Adicionado 'zsh' e 'curl' para o Oh My Zsh
+# you personal configuration
 RUN apt-get update \
  && apt-get install -y \
     ack \
@@ -57,15 +57,14 @@ RUN apt-get update \
     mlocate \
     net-tools \
     psmisc \
-    tmux \
-    xterm \
     zsh \
     curl \
+    python3-vcstool \
  && rm -rf /var/lib/apt/lists/*
 
+# outside deps
 RUN apt-get update \
  && apt-get install -y \
-    python3-vcstool \
     ros-${ROS_DISTRO}-ros2-control \
     ros-${ROS_DISTRO}-ros2-controllers \
     ros-${ROS_DISTRO}-rqt-common-plugins \

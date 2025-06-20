@@ -3,7 +3,7 @@ services:
   ros2_docker:
     build:
       context: ..
-      dockerfile: docker/Dockerfile
+      dockerfile: humble/Dockerfile
       target: dev
       args:
         - AMENT_WORKSPACE_DIR=${AMENT_WORKSPACE_DIR}

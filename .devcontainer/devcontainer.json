@@ -1,7 +1,7 @@
 {
   "name": "ROS2 Docker",
   "dockerComposeFile": [
-    "../docker/docker-compose-vscode.yml"
+    "../humble/docker-compose-vscode.yml"
   ],
   "service": "ros2_docker",
   "workspaceFolder": "/ros_docker",

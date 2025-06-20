@@ -9,3 +9,6 @@ clone:
     vcs import outside-bringup/src < outside.repos --recursive
     @echo "Configuração inicial concluída!"
 
+pull:
+    vcs pull outside-bringup
+    vcs pull outside-bringup/src

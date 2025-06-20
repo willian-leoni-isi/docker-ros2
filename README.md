@@ -26,7 +26,11 @@ docker-ros2/
 
 ## 1.0 Dependencies
 
-
+[`docker`](https://www.docker.com/get-started/)  
+[`vcstool`](http://wiki.ros.org/vcstool)  
+[`Just`](https://github.com/casey/just?tab=readme-ov-file)  
+  
+In case you are running an Nvidia graphics cards and want to have hardware acceleration [with the `Nvidia` container runtime](https://nvidia.github.io/nvidia-container-runtime/)
 
 ## 1.1 Set-up
 
@@ -48,26 +52,46 @@ This should clone the desired repositories given inside `.repos` into your works
 Either **run the Docker** manually with
 
 ```bash
-$ docker compose -f humble/docker-compose-gui.yml up
+$ docker compose -f humble/docker-compose-gui.yml up --build -d
 ```
 
-and then connect to the running Docker
+For `Nvidia graphics cards` you can run:
 
 ```bash
-$ cd ros2/
+$ docker compose -f humble/docker-compose-gui-nvidia.yml up --build -d
+```
+
+Then attach to running container with
+
+```bash
 $ docker exec -it ros2_docker bash
 ```
 
-(or `docker/docker-compose-gui-nvidia.yml` in case you are running an Nvidia graphics cards and want to have hardware acceleration [with the Nvidia container runtime](https://nvidia.github.io/nvidia-container-runtime/)). Alternatively use the corresponding [**Visual Studio Code Dev Containers integration**](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) as described [here](https://github.com/2b-t/docker-for-robotics/blob/main/doc/VisualStudioCodeSetup.md). In latter case the configuration can be adjusted in `docker/docker-compose-vscode.yml`. Using the Docker through Visual Studio Code is much easier and is therefore recommended!
+In order to use `zsh`, there's commented lines at Dockerfile that can be uncommented to set it as default shell, then run:
 
-In order to be able to run **graphical user interfaces** from inside the Docker you might have to type
+```bash
+$ docker exec -it ros2_docker zsh
+```
+
+Inside the container, run:
+
+```bash
+$ source /opt/ros/humble/setup.bash # if using bash
+$ source /opt/ros/humble/setup.zsh # if using zsh
+```
+
+Then compile with:
+
+```bash
+$ colcon build
+```
+
+Sometimes, to be able to run **graphical user interfaces** from inside the Docker you might have to type:
 
 ```bash
 $ xhost +
 ```
 
 on the **host system**. When using a user with the same name, user and group id as the host system this should not be necessary.
-
-
 
 Thx to [Tobit Flatscher](https://github.com/2b-t), that's where it was based from.

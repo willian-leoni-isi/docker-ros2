@@ -104,7 +104,7 @@ RUN git clone https://github.com/Livox-SDK/Livox-SDK2.git \
   &&  cmake .. && make -j \
   && sudo make install
 
-# ----- uncomment to use ZSH as default -----
+# ----- ZSH as default -----
 
 # RUN su - ${USERNAME} -c 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended' \
 #  && chsh -s /bin/zsh ${USERNAME}

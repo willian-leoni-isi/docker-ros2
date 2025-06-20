@@ -1,5 +1,5 @@
 repositories:
   example-repo:
     type: git
-    url: https://github.com/isisim/your-repositorygit
+    url: https://github.com/isisim/your-repository.git
     version: main

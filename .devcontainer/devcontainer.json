@@ -4,7 +4,7 @@
     "../docker/docker-compose-vscode.yml"
   ],
   "service": "ros2_docker",
-  "workspaceFolder": "/ament_ws",
+  "workspaceFolder": "/ros_docker",
   "shutdownAction": "stopCompose",
   "customizations": {
     "vscode": {

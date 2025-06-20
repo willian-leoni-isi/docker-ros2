@@ -1,0 +1,29 @@
+repositories:
+  outside-drivers:
+    type: git
+    url: https://github.com/isisim/outside-drivers.git
+    version: main
+  outside-control:
+    type: git
+    url: https://github.com/isisim/outside-control.git
+    version: main
+  outside-simulation:
+    type: git
+    url: https://github.com/isisim/outside-simulation.git
+    version: main
+  livox_ros_driver:
+    type: git
+    url: https://github.com/isisim/livox_ros_driver2.git
+    version: master
+  Livox-SDK2:
+    type: git
+    url: https://github.com/Livox-SDK/Livox-SDK2.git
+    version: master
+  outside-perception:
+    type: git
+    url: https://github.com/isisim/outside-perception.git
+    version: main
+  outside-navigation:
+    type: git
+    url: https://github.com/isisim/outside-navigation.git
+    version: main

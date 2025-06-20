@@ -3,7 +3,7 @@
 ##############
 FROM ros:humble AS base
 
-ARG AMENT_WORKSPACE_DIR="/ament_ws"
+ARG AMENT_WORKSPACE_DIR="/ros_docker"
 
 WORKDIR ${AMENT_WORKSPACE_DIR}
 SHELL ["/bin/bash", "-c"]
@@ -38,7 +38,7 @@ ENV DEBIAN_FRONTEND=dialog
 #####################
 FROM base as dev
 
-ARG AMENT_WORKSPACE_DIR="/ament_ws"
+ARG AMENT_WORKSPACE_DIR="/ros_docker"
 ARG USERNAME="developer"
 ARG UID=1000
 ARG GID=1000
@@ -100,12 +100,7 @@ RUN apt-get update \
 RUN su - ${USERNAME} -c 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended' \
  && chsh -s /bin/zsh ${USERNAME}
 
-RUN echo 'source /opt/ros/humble/setup.zsh' >> /home/$USERNAME/.zshrc && \
-    echo 'source /outside/install/setup.zsh' >> /home/$USERNAME/.zshrc && \
-    echo 'eval "$(register-python-argcomplete3 ros2)"' >> /home/$USERNAME/.zshrc && \
-    echo 'eval "$(register-python-argcomplete3 colcon)"' >> /home/$USERNAME/.zshrc && \
-    echo 'alias rc="source ~/.zshrc"' >> /home/$USERNAME/.zshrc && \
-    chown $USERNAME:$USERNAME /home/$USERNAME/.zshrc
+RUN chown $USERNAME:$USERNAME /home/$USERNAME/.zshrc
 
 ENV DEBIAN_FRONTEND=dialog
 

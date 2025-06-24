@@ -1,16 +1,16 @@
 version: "3.9"
 services:
-  ros2_humble:
+  ros2_jazzy:
     build:
       context: ..
-      dockerfile: humble/Dockerfile
+      dockerfile: jazzy/Dockerfile
       target: dev
       args:
         - AMENT_WORKSPACE_DIR=${AMENT_WORKSPACE_DIR}
         - USERNAME=${USERNAME:-developer}
         - UID=${UID}
         - GID=${GID}
-    container_name: ros2_humble
+    container_name: ros2_jazzy
     environment:
       - ROS_DOMAIN_ID=${ROS_DOMAIN_ID}
       # Limit ROS communication to local computer only

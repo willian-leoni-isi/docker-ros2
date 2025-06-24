@@ -4,7 +4,7 @@
     "../humble/docker-compose-vscode.yml"
   ],
   "service": "ros2_docker",
-  "workspaceFolder": "/ros_docker",
+  "workspaceFolder": "/ros_humble",
   "shutdownAction": "stopCompose",
   "customizations": {
     "vscode": {

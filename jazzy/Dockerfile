@@ -78,6 +78,7 @@ RUN apt-get update \
     ros-${ROS_DISTRO}-navigation2 \
     ros-${ROS_DISTRO}-nav2-bringup \
     ros-${ROS_DISTRO}-apriltag-ros \
+    ros-${ROS_DISTRO}-gz-ros2-control
    #  todo: add ros-gazebo-ignition
     libmodbus-dev \
 
@@ -93,6 +94,7 @@ RUN apt-get update \
  # https://github.com/devcontainers/images/issues/1056
  && userdel -r ubuntu || true \
  && addgroup --gid ${GID} ${USERNAME} \
+  && useradd -s /bin/bash --uid ${UID} --gid ${GID} -m ${USERNAME} \
  && echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} \
  && chown -R ${UID}:${GID} /home/${USERNAME} \
  && chown -R ${UID}:${GID} ${AMENT_WORKSPACE_DIR}
@@ -114,8 +116,8 @@ RUN chown $USERNAME:$USERNAME /home/$USERNAME/.zshrc
 
 RUN echo "alias rc='source ~/.zshrc'" >> /home/$USERNAME/.zshrc
 RUN echo "source /opt/ros/jazzy/setup.zsh && source /ros_jazzy/install/setup.zsh" >> /home/$USERNAME/.zshrc 
-RUN echo "eval '$(register-python-argcomplete3 ros2)'" >> /home/$USERNAME/.zshrc 
-RUN echo "eval '$(register-python-argcomplete3 colcon)'" >> /home/$USERNAME/.zshrc 
+# RUN echo "eval '$(register-python-argcomplete3 ros2)'" >> /home/$USERNAME/.zshrc 
+# RUN echo "eval '$(register-python-argcomplete3 colcon)'" >> /home/$USERNAME/.zshrc 
 RUN sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="arrow"/' /home/$USERNAME/.zshrc
 
 ENV DEBIAN_FRONTEND=dialog

@@ -111,8 +111,8 @@ RUN chown $USERNAME:$USERNAME /home/$USERNAME/.zshrc
 
 RUN echo "alias rc='source ~/.zshrc'" >> /home/$USERNAME/.zshrc
 RUN echo "source /opt/ros/humble/setup.zsh && source /ros_humble/install/setup.zsh" >> /home/$USERNAME/.zshrc 
-RUN echo "eval '$(register-python-argcomplete3 ros2)'" >> /home/$USERNAME/.zshrc 
-RUN echo "eval '$(register-python-argcomplete3 colcon)'" >> /home/$USERNAME/.zshrc 
+# RUN echo "eval '$(register-python-argcomplete3 ros2)'" >> /home/$USERNAME/.zshrc 
+# RUN echo "eval '$(register-python-argcomplete3 colcon)'" >> /home/$USERNAME/.zshrc 
 RUN sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="arrow"/' /home/$USERNAME/.zshrc
 
 #  --------------------------------------------

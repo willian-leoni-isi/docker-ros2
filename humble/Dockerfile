@@ -11,22 +11,22 @@ SHELL ["/bin/bash", "-c"]
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
- && apt-get -y install \
-    git \
-    python3-colcon-clean \
-    python3-osrf-pycommon \
- && rm -rf /var/lib/apt/lists/*
+  && apt-get -y install \
+  git \
+  python3-colcon-clean \
+  python3-osrf-pycommon \
+  && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update \
- && apt-get -y install \
-    ros-${ROS_DISTRO}-desktop \
-    ros-${ROS_DISTRO}-compressed-image-transport \
-    ros-${ROS_DISTRO}-compressed-depth-image-transport \
-    ros-${ROS_DISTRO}-image-transport \
-    ros-${ROS_DISTRO}-point-cloud-transport \
-    ros-${ROS_DISTRO}-point-cloud-transport-plugins \
-    ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
- && rm -rf /var/lib/apt/lists/*
+  && apt-get -y install \
+  ros-${ROS_DISTRO}-desktop \
+  ros-${ROS_DISTRO}-compressed-image-transport \
+  ros-${ROS_DISTRO}-compressed-depth-image-transport \
+  ros-${ROS_DISTRO}-image-transport \
+  ros-${ROS_DISTRO}-point-cloud-transport \
+  ros-${ROS_DISTRO}-point-cloud-transport-plugins \
+  ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
+  && rm -rf /var/lib/apt/lists/*
 
 # Add additional installation instructions here...
 
@@ -47,54 +47,55 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # you personal configuration
 RUN apt-get update \
- && apt-get install -y \
-    ack \
-    cloc \
-    gdb \
-    htop \
-    iperf3 \
-    iputils-ping \
-    mlocate \
-    net-tools \
-    psmisc \
-    zsh \
-    curl \
-    python3-vcstool \
- && rm -rf /var/lib/apt/lists/*
+  && apt-get install -y \
+  ack \
+  cloc \
+  gdb \
+  htop \
+  iperf3 \
+  iputils-ping \
+  mlocate \
+  net-tools \
+  psmisc \
+  zsh \
+  curl \
+  python3-vcstool \
+  bear \
+  clangd \
+  && rm -rf /var/lib/apt/lists/*
 
 # outside deps
 RUN apt-get update \
- && apt-get install -y \
-    ros-${ROS_DISTRO}-ros2-control \
-    ros-${ROS_DISTRO}-ros2-controllers \
-    ros-${ROS_DISTRO}-rqt-common-plugins \
-    ros-${ROS_DISTRO}-rqt-robot-steering \
-    ros-${ROS_DISTRO}-rqt-tf-tree \
-    ros-${ROS_DISTRO}-rviz2 \
-    ros-${ROS_DISTRO}-rviz2 \
-    ros-${ROS_DISTRO}-gazebo-ros \
-    ros-${ROS_DISTRO}-nmea-msgs \
-    ros-${ROS_DISTRO}-mavros-msgs \
-    ros-${ROS_DISTRO}-gazebo-ros2-control \
-    ros-${ROS_DISTRO}-xacro \
-    ros-${ROS_DISTRO}-cartographer-ros \
-    ros-${ROS_DISTRO}-navigation2 \
-    ros-${ROS_DISTRO}-nav2-bringup \
-    ros-${ROS_DISTRO}-apriltag-ros \
-    libmodbus-dev \
-
- && rm -rf /var/lib/apt/lists/*
+  && apt-get install -y \
+  ros-${ROS_DISTRO}-ros2-control \
+  ros-${ROS_DISTRO}-ros2-controllers \
+  ros-${ROS_DISTRO}-rqt-common-plugins \
+  ros-${ROS_DISTRO}-rqt-robot-steering \
+  ros-${ROS_DISTRO}-rqt-tf-tree \
+  ros-${ROS_DISTRO}-rviz2 \
+  ros-${ROS_DISTRO}-rviz2 \
+  ros-${ROS_DISTRO}-gazebo-ros \
+  ros-${ROS_DISTRO}-nmea-msgs \
+  ros-${ROS_DISTRO}-mavros-msgs \
+  ros-${ROS_DISTRO}-gazebo-ros2-control \
+  ros-${ROS_DISTRO}-xacro \
+  ros-${ROS_DISTRO}-cartographer-ros \
+  ros-${ROS_DISTRO}-navigation2 \
+  ros-${ROS_DISTRO}-nav2-bringup \
+  ros-${ROS_DISTRO}-apriltag-ros \
+  libmodbus-dev \
+  && rm -rf /var/lib/apt/lists/*
 
 # Install additional developer tools here...
 
 RUN apt-get update \
- && apt-get install -y sudo \
- && rm -rf /var/lib/apt/lists/* \
- && addgroup --gid ${GID} ${USERNAME} \
- && adduser --disabled-password --gecos '' --uid ${GID} --gid ${GID} ${USERNAME} \
- && echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} \
- && chown -R ${UID}:${GID} /home/${USERNAME} \
- && chown -R ${UID}:${GID} ${AMENT_WORKSPACE_DIR}
+  && apt-get install -y sudo \
+  && rm -rf /var/lib/apt/lists/* \
+  && addgroup --gid ${GID} ${USERNAME} \
+  && adduser --disabled-password --gecos '' --uid ${GID} --gid ${GID} ${USERNAME} \
+  && echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} \
+  && chown -R ${UID}:${GID} /home/${USERNAME} \
+  && chown -R ${UID}:${GID} ${AMENT_WORKSPACE_DIR}
 
 RUN git clone https://github.com/Livox-SDK/Livox-SDK2.git \
   &&  cd ./Livox-SDK2/ \
@@ -106,14 +107,12 @@ RUN git clone https://github.com/Livox-SDK/Livox-SDK2.git \
 # ----- ZSH as default -----
 
 RUN su - ${USERNAME} -c 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended' \
- && chsh -s /bin/zsh ${USERNAME}
+  && chsh -s /bin/zsh ${USERNAME}
 RUN chown $USERNAME:$USERNAME /home/$USERNAME/.zshrc
 
 RUN echo "alias rc='source ~/.zshrc'" >> /home/$USERNAME/.zshrc
 RUN echo "source /opt/ros/humble/setup.zsh && source /ros_humble/install/setup.zsh" >> /home/$USERNAME/.zshrc 
-# RUN echo "eval '$(register-python-argcomplete3 ros2)'" >> /home/$USERNAME/.zshrc 
-# RUN echo "eval '$(register-python-argcomplete3 colcon)'" >> /home/$USERNAME/.zshrc 
-RUN sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="arrow"/' /home/$USERNAME/.zshrc
+RUN sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="cloud"/' /home/$USERNAME/.zshrc
 
 #  --------------------------------------------
 

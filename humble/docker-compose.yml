@@ -27,11 +27,11 @@ services:
     # Required for accessing hardware
     privileged: true
     tty: true
+    restart: unless-stopped
     volumes:
       # Required for accessing hardware
       - /dev:/dev
       # Required for accessing storage media
-      #- /media:/media
+      - /mnt/dados/Bags/:${AMENT_WORKSPACE_DIR}/bags
       - ../dds:${AMENT_WORKSPACE_DIR}/dds/
-
       - ../outside-bringup/src:${AMENT_WORKSPACE_DIR}/src # outside meta-package

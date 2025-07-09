@@ -33,5 +33,10 @@ services:
       - /dev:/dev
       # Required for accessing storage media
       - /mnt/dados/Bags/:${AMENT_WORKSPACE_DIR}/bags
+      # project meta-package
       - ../dds:${AMENT_WORKSPACE_DIR}/dds/
       - ../outside-bringup/src:${AMENT_WORKSPACE_DIR}/src # outside meta-package
+      # Zsh configuration for ros2 autocomplete, colcon autocomplete and syntax highlight
+      - ../.zshrc:$HOME/.zshrc
+      # Required when using nvim
+      - $HOME/.config/nvim:$HOME/.config/nvim

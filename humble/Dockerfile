@@ -28,8 +28,6 @@ RUN apt-get update \
   ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
   && rm -rf /var/lib/apt/lists/*
 
-# Add additional installation instructions here...
-
 ENV DEBIAN_FRONTEND=dialog
 
 
@@ -45,26 +43,29 @@ ARG GID=1000
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# you personal configuration
-RUN apt-get update \
-  && apt-get install -y \
-  ack \
-  cloc \
-  gdb \
-  htop \
-  iperf3 \
-  iputils-ping \
-  mlocate \
-  net-tools \
-  psmisc \
-  zsh \
-  curl \
-  python3-vcstool \
-  bear \
-  clangd \
-  && rm -rf /var/lib/apt/lists/*
+# DEV SETTINGS
 
-# outside deps
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+    software-properties-common \
+ && add-apt-repository ppa:neovim-ppa/unstable -y \
+ && apt-get update \
+ && apt-get install -y \
+    neovim \
+    git \
+    build-essential \
+    curl \
+    wget \
+    unzip \
+    ripgrep \
+    ack cloc gdb htop iperf3 iputils-ping mlocate net-tools psmisc zsh python3-vcstool bear clangd sudo \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install -y python3-pip clang-format && \
+    pip3 install black xmlformatter && \
+    rm -rf /var/lib/apt/lists/*
+
+# ros deps
 RUN apt-get update \
   && apt-get install -y \
   ros-${ROS_DISTRO}-ros2-control \
@@ -86,7 +87,9 @@ RUN apt-get update \
   libmodbus-dev \
   && rm -rf /var/lib/apt/lists/*
 
-# Install additional developer tools here...
+# Create a non-root user with a UID/GID.
+# This user is added to the sudo group with passwordless access.
+# Also, set ownership for user's /home
 
 RUN apt-get update \
   && apt-get install -y sudo \
@@ -97,6 +100,8 @@ RUN apt-get update \
   && chown -R ${UID}:${GID} /home/${USERNAME} \
   && chown -R ${UID}:${GID} ${AMENT_WORKSPACE_DIR}
 
+# ----- Livox-SDK2 for using Lidar plugins -----
+
 RUN git clone https://github.com/Livox-SDK/Livox-SDK2.git \
   &&  cd ./Livox-SDK2/ \
   &&  mkdir build \
@@ -104,15 +109,16 @@ RUN git clone https://github.com/Livox-SDK/Livox-SDK2.git \
   &&  cmake .. && make -j \
   && sudo make install
 
-# ----- ZSH as default -----
+# ----- Z SHELL -----
 
 RUN su - ${USERNAME} -c 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended' \
-  && chsh -s /bin/zsh ${USERNAME}
-RUN chown $USERNAME:$USERNAME /home/$USERNAME/.zshrc
+  && chsh -s /bin/zsh ${USERNAME}
 
-RUN echo "alias rc='source ~/.zshrc'" >> /home/$USERNAME/.zshrc
-RUN echo "source /opt/ros/humble/setup.zsh && source /ros_humble/install/setup.zsh" >> /home/$USERNAME/.zshrc 
-RUN sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="cloud"/' /home/$USERNAME/.zshrc
+RUN chown $USERNAME:$USERNAME /home/$USERNAME/.zshrc
+RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-/home/${USERNAME}/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting;
+# RUN echo "alias rc='source ~/.zshrc'" >> /home/$USERNAME/.zshrc
+# RUN echo "source /opt/ros/humble/setup.zsh && source /ros_humble/install/setup.zsh" >> /home/$USERNAME/.zshrc 
+# RUN sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="cloud"/' /home/$USERNAME/.zshrc
 
 #  --------------------------------------------
 

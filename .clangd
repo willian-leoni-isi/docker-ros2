@@ -1,0 +1,7 @@
+CompileFlags:
+  Add:
+    # Add the path to your ROS 2 installation. Adjust 'humble' if needed.
+    - -I/opt/ros/humble/include/**
+
+    # You might also want to add your workspace's install directory
+    - -I./install/include/**

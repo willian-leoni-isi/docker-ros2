@@ -7,4 +7,3 @@ services:
     environment:
      - NVIDIA_VISIBLE_DEVICES=all
     runtime: nvidia
-

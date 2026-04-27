@@ -18,10 +18,10 @@ services:
       - YOUR_IP=${YOUR_IP}
       - ROBOT_IP=${ROBOT_IP}
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-      - CYCLONEDDS_URI=${AMENT_WORKSPACE_DIR}/dds/cyclone.xml
+      # Configure Cyclone with a custom configuration using the IPs above
+      #- CYCLONEDDS_URI=${AMENT_WORKSPACE_DIR}/dds/cyclone.xml
     extra_hosts:
       - "${ROBOT_HOSTNAME}:${ROBOT_IP}"
-    image: outside:devel
     # Required for communicating over the network
     network_mode: "host"
     # Required for accessing hardware
@@ -32,5 +32,9 @@ services:
       - /dev:/dev
       # Required for accessing storage media
       #- /media:/media
-      - ../dds:${AMENT_WORKSPACE_DIR}/dds/
-      - ~/ros-workspace/outside-bringup:${AMENT_WORKSPACE_DIR}
+      # pylon dependencies
+      - ../pylon:${AMENT_WORKSPACE_DIR}/pylon
+      - ../src:${AMENT_WORKSPACE_DIR}/src
+      - ../dds:${AMENT_WORKSPACE_DIR}/dds
+      # Required for ROS 2 shared memory communication
+      - /dev/shm:/dev/shm

@@ -1,9 +1,13 @@
 ##############
 # Base image #
 ##############
-FROM ros:humble AS base
+FROM ros:jazzy-ros-base AS base
 
 ARG AMENT_WORKSPACE_DIR="/ament_ws"
+
+LABEL org.opencontainers.image.authors="tobit.flatscher@outlook.com"
+LABEL description="ROS 2 Jazzy Docker template"
+LABEL version="1.0"
 
 WORKDIR ${AMENT_WORKSPACE_DIR}
 SHELL ["/bin/bash", "-c"]
@@ -19,7 +23,6 @@ RUN apt-get update \
 
 RUN apt-get update \
  && apt-get -y install \
-    ros-${ROS_DISTRO}-desktop \
     ros-${ROS_DISTRO}-compressed-image-transport \
     ros-${ROS_DISTRO}-compressed-depth-image-transport \
     ros-${ROS_DISTRO}-image-transport \
@@ -30,13 +33,15 @@ RUN apt-get update \
 
 # Add additional installation instructions here...
 
+RUN mkdir -p /data
+
 ENV DEBIAN_FRONTEND=dialog
 
 
 #####################
 # Development image #
 #####################
-FROM base as dev
+FROM base AS dev
 
 ARG AMENT_WORKSPACE_DIR="/ament_ws"
 ARG USERNAME="developer"
@@ -45,45 +50,30 @@ ARG GID=1000
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# MODIFICADO: Adicionado 'zsh' e 'curl' para o Oh My Zsh
 RUN apt-get update \
  && apt-get install -y \
     ack \
+    bmon \
     cloc \
     gdb \
     htop \
     iperf3 \
     iputils-ping \
-    mlocate \
     net-tools \
+    plocate \
     psmisc \
     tmux \
     xterm \
-    zsh \
-    curl \
  && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update \
  && apt-get install -y \
     python3-vcstool \
-    ros-${ROS_DISTRO}-ros2-control \
-    ros-${ROS_DISTRO}-ros2-controllers \
     ros-${ROS_DISTRO}-rqt-common-plugins \
     ros-${ROS_DISTRO}-rqt-robot-steering \
     ros-${ROS_DISTRO}-rqt-tf-tree \
     ros-${ROS_DISTRO}-rviz2 \
-    ros-${ROS_DISTRO}-rviz2 \
-    ros-${ROS_DISTRO}-gazebo-ros \
-    ros-${ROS_DISTRO}-nmea-msgs \
-    ros-${ROS_DISTRO}-mavros-msgs \
-    ros-${ROS_DISTRO}-gazebo-ros2-control \
-    ros-${ROS_DISTRO}-xacro \
-    ros-${ROS_DISTRO}-cartographer-ros \
-    ros-${ROS_DISTRO}-navigation2 \
-    ros-${ROS_DISTRO}-nav2-bringup \
-    ros-${ROS_DISTRO}-apriltag-ros \
-    libmodbus-dev \
-
+    ros-${ROS_DISTRO}-pcl-ros \
  && rm -rf /var/lib/apt/lists/*
 
 # Install additional developer tools here...
@@ -91,23 +81,21 @@ RUN apt-get update \
 RUN apt-get update \
  && apt-get install -y sudo \
  && rm -rf /var/lib/apt/lists/* \
+ # Remove user blocking UID 1000 on Ubuntu 24.04 and onwards:
+ # See https://bugs.launchpad.net/cloud-images/+bug/2005129 and
+ # https://github.com/devcontainers/images/issues/1056
+ && userdel -r ubuntu || true \
  && addgroup --gid ${GID} ${USERNAME} \
  && adduser --disabled-password --gecos '' --uid ${GID} --gid ${GID} ${USERNAME} \
  && echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} \
  && chown -R ${UID}:${GID} /home/${USERNAME} \
  && chown -R ${UID}:${GID} ${AMENT_WORKSPACE_DIR}
 
-RUN su - ${USERNAME} -c 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended' \
- && chsh -s /bin/zsh ${USERNAME}
-
-RUN echo 'source /opt/ros/humble/setup.zsh' >> /home/$USERNAME/.zshrc && \
-    echo 'source /outside/install/setup.zsh' >> /home/$USERNAME/.zshrc && \
-    echo 'eval "$(register-python-argcomplete3 ros2)"' >> /home/$USERNAME/.zshrc && \
-    echo 'eval "$(register-python-argcomplete3 colcon)"' >> /home/$USERNAME/.zshrc && \
-    echo 'alias rc="source ~/.zshrc"' >> /home/$USERNAME/.zshrc && \
-    chown $USERNAME:$USERNAME /home/$USERNAME/.zshrc
-
 ENV DEBIAN_FRONTEND=dialog
 
+RUN echo "alias rsource='source ${AMENT_WORKSPACE_DIR}/install/setup.bash'" >> /home/${USERNAME}/.bash_aliases \
+ && echo "alias rbuild='(cd ${AMENT_WORKSPACE_DIR} && colcon build)'" >> /home/${USERNAME}/.bash_aliases \
+ && echo "alias rclean='(cd ${AMENT_WORKSPACE_DIR} && colcon clean workspace -y)'" >> /home/${USERNAME}/.bash_aliases \
+ && echo "rsource || source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USERNAME}/.bashrc
 
 USER ${USERNAME}
